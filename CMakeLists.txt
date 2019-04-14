@@ -16,7 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 find_package(Eigen3 REQUIRED NO_MODULE)
 
-
+find_package(francor REQUIRED)
+find_package(OpenCV REQUIRED)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -139,6 +140,10 @@ add_executable(laser_scan_feature_detector
   src/laser_scan_feature_detector_node.cpp
 )
 
+add_executable(line_detector_node
+  src/line_detector_node.cpp
+)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -148,17 +153,24 @@ add_executable(laser_scan_feature_detector
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(laser_scan_feature_detector ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(line_detector_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}
-  ${catkin_LIBRARIES}
-  Eigen3::Eigen
+  PRIVATE ${catkin_LIBRARIES}
+          Eigen3::Eigen
 )
 
 target_link_libraries(laser_scan_feature_detector
   ${catkin_LIBRARIES}
   Eigen3::Eigen
   ${PROJECT_NAME}
+)
+
+target_link_libraries(line_detector_node
+  ${catkin_LIBRARIES}
+  francor-vision
+  Eigen3::Eigen
 )
 
 #############
